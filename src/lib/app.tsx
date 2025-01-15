@@ -1,42 +1,61 @@
 export interface UserPostsTypes {
   id: string;
   name: string;
-  avatar: string;
   posts: string;
-  createAt: string;
+  createdAt: string;
+}
+
+interface AddressTypes {
+  street: string;
+  suite: string;
+  city: string;
+  zipcode: string;
+  geo: { lat: string; lng: string };
+}
+interface CompanyTypes {
+  name: string;
+  catchPhrase: string;
+  bs: string;
 }
 
 export interface UserTypes {
-  id: string;
+  id?: string;
   name: string;
-  title: string;
-  post_desc: string;
-  createAt: string;
-  image: string;
+  email?: string;
+  birthDate?: string;
+  address?: AddressTypes;
+  phone?: string;
+  website?: string;
+  company?: CompanyTypes;
 }
 
-const PROJECT_TOKEN = process.env.NEXT_PUBLIC_PROJECT_TOKEN;
-
 const buildUrl = (...paths: string[]) =>
-  `https://${PROJECT_TOKEN}.mockapi.io/api/v1/${paths.join('/')}`;
+  `https://jsonplaceholder.typicode.com/${paths.join('/')}`;
 
-// const stringifyQueryParams = (params: Record<string, string>) =>
-//   new URLSearchParams(params).toString();
+const sendRequest = async <T,>(url: string, init?: RequestInit): Promise<T> => {
+  try {
+    const response = await fetch(url, init);
 
-const sendRequest = async <T,>(url: string, init?: RequestInit) => {
-  const response = await fetch(url, init);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-  if (!response.ok) {
-    throw new Error(await response.text());
+    return (await response.json()) as T;
+  } catch (error) {
+    console.error(`Error fetching data from ${url}:`, error);
+    throw error;
   }
-
-  return (await response.json()) as T;
 };
 
-export const getSummaryStats = (init?: RequestInit) => {
-  return sendRequest<UserTypes>(buildUrl('user'), init);
+export const getUsers = async (init?: RequestInit) => {
+  return sendRequest<UserTypes[]>(buildUrl('users'), init);
 };
 
-export const getSummarySales = (init?: RequestInit) => {
+export const getUser = (id: string, init?: RequestInit) => {
+  console.log(id);
+  return sendRequest<UserTypes>(buildUrl('users', id), init);
+};
+
+export const getPosts = async (init?: RequestInit) => {
   return sendRequest<UserPostsTypes[]>(buildUrl('posts'), init);
 };
