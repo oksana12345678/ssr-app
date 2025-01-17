@@ -1,7 +1,7 @@
 import { getUsers } from '@/lib/app';
 import getQueryClient from '@/lib/utils/getQueryClient';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import React from 'react';
+import React, { Suspense } from 'react';
 import UsersList from '../../components/users/UsersList';
 
 async function Page() {
@@ -15,9 +15,13 @@ async function Page() {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <UsersList />
-    </HydrationBoundary>
+    <Suspense
+      fallback={<p className="pt-[400px] pl-[650px] text-2xl">Loading...</p>}
+    >
+      <HydrationBoundary state={dehydratedState}>
+        <UsersList />
+      </HydrationBoundary>
+    </Suspense>
   );
 }
 
