@@ -1,4 +1,3 @@
-
 # SSR App
 
 This is a Next.js project bootstrapped with `create-next-app` for server-side rendering (SSR). It provides features for managing posts and users, and uses `react-query` for data fetching.
@@ -83,6 +82,9 @@ json
     "typescript": "^5"
   }
 }
+
+```
+
 How to Use
 Navigate to the Post List: You can access the list of posts at the /posts route.
 View Post Details: Click on a post to view its detailed page.
@@ -96,4 +98,3 @@ Click New Project.
 Select your Git repository.
 Follow the instructions to deploy the app.
 For more details, refer to the Next.js Deployment Documentation.
-
