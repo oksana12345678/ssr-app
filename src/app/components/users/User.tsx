@@ -1,60 +1,104 @@
 import React from 'react';
-import { UserTypes } from '../../../lib/app';
 import clsx from 'clsx';
+import { UserTypes } from '@/types/main-types';
 
-export interface UserByIdTypes extends UserTypes {
+export interface UserProps extends Omit<UserTypes, 'company'> {
   className?: string;
+  companyName?: string;
+  companyCatchPhrase?: string;
+  companyBs?: string;
+  nameStyle?: string;
+  avatarStyle?: string;
+  contentStyle?: string;
+  emailStyle?: string;
 }
 
 async function User({
-  name,
   email,
   address,
   phone,
   website,
-  company,
+  companyName,
   className,
-}: UserByIdTypes) {
+  firstname,
+  lastname,
+  companyBs,
+  companyCatchPhrase,
+  nameStyle,
+  avatarStyle,
+  contentStyle,
+  emailStyle,
+}: UserProps) {
   return (
-    <div className={clsx('flex  gap-2 text-black p-4', className)}>
-      <div>
-        <p className="text-base font-bold whitespace-nowrap text-ellipsis overflow-hidden">
-          {name}
-        </p>
-        <p className="text-xs font-medium text-gray-900 flex flex-col">
-          Email:
-          <span className="text-sm font-medium font-serif whitespace-nowrap text-ellipsis overflow-hidden">
-            {email}
-          </span>
-        </p>{' '}
-        {phone && <p>Phone: {phone}</p>}
-        {website && <p>Website: {website}</p>}
-        {address && (
-          <div className="flex flex-col gap-2">
-            <p>City: {address?.city}</p>
-            <p>
-              Street: {address?.street} {address?.suite}
-            </p>
-
-            <p>Zipcode: {address?.zipcode}</p>
-          </div>
+    <div
+      className={clsx(
+        'rounded-lg p-5 max-w-3xl  mx-auto flex gap-4 items-start ',
+        className
+      )}
+    >
+      <div
+        className={clsx(
+          'w-16 h-16 rounded-full text-gray-500 font-bold  bg-gray-200 flex-shrink-0 flex items-center justify-center',
+          avatarStyle
         )}
+      >
+        <span>
+          {firstname?.[0]}
+          {lastname?.[0]}
+        </span>
       </div>
 
-      {company && (
+      <div className={clsx('', contentStyle)}>
         <div>
-          <p>Company</p>
-          <p className="text-gray-900 font-serif text-base font-medium">
-            {company?.name}
-          </p>{' '}
-          <p className="text-gray-900 font-serif text-base font-medium">
-            {company?.catchPhrase}
-          </p>{' '}
-          <p className="text-gray-900 font-serif text-base font-medium">
-            {company?.bs}
+          <h2
+            className={clsx(
+              'text-xl font-bold text-gray-900 truncate',
+              nameStyle
+            )}
+          >
+            {firstname} {lastname}
+          </h2>
+          <p className={clsx('text-gray-600 text-sm  truncate', emailStyle)}>
+            {email}
           </p>
         </div>
-      )}
+
+        <div className="mt-4 text-sm text-gray-700">
+          {phone && (
+            <p className="flex items-center gap-2">
+              <span className="font-semibold">📞 Phone:</span> {phone}
+            </p>
+          )}
+          {website && (
+            <p className="flex items-center gap-2">
+              <span className="font-semibold">🌐 Website:</span>
+              <a
+                href={`https://${website}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                {website}
+              </a>
+            </p>
+          )}
+          {address && (
+            <p className="flex items-start gap-2 mt-2">
+              <span className="font-semibold ">📍 Address:</span>
+              <span>
+                {address.city}, {address.street} {address.suite} -{' '}
+                {address.zipcode}
+              </span>
+            </p>
+          )}
+        </div>
+
+        <div className="mt-4">
+          <p className="font-semibold text-gray-800">🏢 {companyName}</p>
+          <p className="text-gray-600">{companyBs}</p>
+          <p className="italic text-gray-600">{companyCatchPhrase}</p>
+        </div>
+      </div>
     </div>
   );
 }
