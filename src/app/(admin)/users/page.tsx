@@ -10,6 +10,7 @@ async function Page() {
   await queryClient.prefetchQuery({
     queryKey: ['users'],
     queryFn: () => getUsers({ cache: 'no-store' }),
+    staleTime: 10 * 1000,
   });
 
   const dehydratedState = dehydrate(queryClient);
